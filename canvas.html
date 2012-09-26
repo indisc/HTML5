@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta  charset="utf-8" />
+<title>canvas</title>
+</head>
+
+<body>
+
+<h2>fly your dream</h2>
+
+<canvas id="rect" width="400" height="300"></canvas>
+</body>
+</html>
+
+<script type="text/javascript">
+
+//drawRect('rect');
+//drawPath('rect');
+//drawLine('rect');
+//drawLineGradient('rect');
+//drawTransformShape('rect');
+//wave('rect');
+function drawRect(id){
+	var canvas = document.getElementById(id);
+	
+	if( canvas == null)
+	return false;
+	
+	var context = canvas.getContext('2d');
+	context.fillStyle = "0044ff";
+	context.fillRect(0,0,400,300);
+
+	context.fillStyle = 'red';
+	context.strokeStyle = 'blue';
+	context.lineWidth = 1;
+	context.fillRect(50,50,100,100);
+
+	//context.strokeRect(50,50,100,100);
+	
+}
+
+
+function drawPath(id){
+ 	var canvas = document.getElementById(id);
+	
+	if( canvas == null)
+	return false;	
+
+	var context = canvas.getContext('2d');
+	context.fillStyle = 'eee';
+	context.fillRect(0,0,400,300);
+
+	var n = 0;
+	for( var i = 0; i < 10; i++){
+		context.beginPath();
+		context.arc(i*25,i*25,i*10,0,Math.PI*2,true);
+		context.closePath();
+		context.fillStyle = "rgba(255,0,0,0.25)";
+
+		context.fill();
+	}
+}
+
+function drawLine(id){
+ 	var canvas = document.getElementById(id);
+	
+	if( canvas == null)
+	return false;	
+
+	var context = canvas.getContext('2d');
+
+	context.fillStyle = 'ff00ff';
+	context.fillRect(0,0,400,300);
+
+	var n= 0;
+	var dx = 150;
+	var dy = 150;
+	var s = 100;
+	context.beginPath();
+	context.fillStyle = 'rgb(100,255,100)';
+	context.strokeStyle = 'rgb(0,0,100)';
+
+	var x = Math.sin(0);
+	var y = Math.cos(0);
+	var dig = Math.PI/15*11;
+
+	for(var i = 0; i < 30; i++){
+		var x = Math.sin(i*dig);
+		var y = Math.cos(i*dig);
+
+		context.lineTo(dx + x * s, dy + y*s);
+	}
+
+	context.closePath();
+	context.fill();
+	context.stroke();
+}
+
+function drawLineGradient(id){
+ 	var canvas = document.getElementById(id);
+	
+	if( canvas == null)
+	return false;	
+
+	var context = canvas.getContext('2d');
+
+	var gradient1 = context.createLinearGradient(0,0,0,300);
+	gradient1.addColorStop(0, 'rgb(255,255,0)');
+	gradient1.addColorStop(1, 'rgb(0,255,255)');
+	context.fillStyle = gradient1;
+	context.fillRect(0,0,400,300);
+		/*
+			var n = 0;
+			var gradient2 = context.createLinearGradient(0,0,300,0);
+
+			gradient2.addColorStop(0,'rgb(0,0,255)');
+			gradient2.addColorStop(1,'rgb(255,0,0)');
+
+			for(var i = 0; i < 10, i++){
+				context.beginPath();
+				//context.fillStyle = gradient2;
+				context.fillStyle = "rgba(255,0,0,0.25)";
+				context.arc(i*25,i*25,i*10,0,Math.PI*2,true);
+				context.closePath();
+				context.fill();
+			}
+		*/
+	var gradient2 = context.createLinearGradient(0,0,300,0);
+	gradient2.addColorStop(0, 'rgba(0,0,255,0.5)');
+	gradient2.addColorStop(1, 'rgba(255,0,0,0.5)');
+	var n = 0;
+	for( var i = 0; i < 10; i++){
+		context.beginPath();
+		context.arc(i*25,i*25,i*10,0,Math.PI*2,true);
+		context.closePath();
+		context.fillStyle = gradient2;
+
+		context.fill();
+	}
+
+}
+
+function drawTransformShape(id){
+ 	var canvas = document.getElementById(id);
+	
+	if( canvas == null)
+	return false;	
+
+	var context = canvas.getContext('2d');
+
+	context.fillStyle = '#ff00ff';
+	context.fillRect(0,0,400,300);
+	context.translate(200,50);
+
+	for(var i = 0; i < 50; i++){
+		context.translate(25,25);
+		context.scale(0.95,0.95);
+
+		context.rotate(Math.PI/10);
+		create5star(context);
+		context.fill();
+	}
+}
+
+function create5star(context){
+	var n = 0;
+	var dx = 100;
+	var dy = 0;
+	var s = 50;
+	context.beginPath();
+	context.fillStyle = 'rgba(255,0,0,0.5)';
+
+	var x = Math.sin(0);
+	var y = Math.cos(0);
+	var dig = Math.PI/5*4;
+
+	for(var i = 0; i < 5; i++){
+		var x = Math.sin(i*dig);
+		var y = Math.cos(i*dig);
+		context.lineTo(dx + x*s, dy + y*s);
+	}
+
+	context.closePath();
+}
+
+
+      var canvas = document.getElementById('rect');
+      var ctx = canvas.getContext('2d');
+ 
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+ 
+      var waves = ["rgba(195, 002, 002, 0.6)",
+					"rgba(174, 000, 000, 0.3)",
+					"rgba(227, 093, 068, 0.3)",
+					"rgba(234, 135, 109, 0.3)",
+                   ]
+ 
+      var i = 0;
+ 
+      function draw() {
+        canvas.width = canvas.width;
+ 
+ 
+        ctx.fillStyle    = '#00F';
+        ctx.font         = 'bold 20px sans-serif';
+        ctx.textBaseline = 'top';
+        ctx.fillText  ('Hello Canvas!', 0, 0);
+ 
+ 
+        for(var j = waves.length - 1; j >= 0; j--) {
+          var offset = i + j * Math.PI * 12;
+          ctx.fillStyle = (waves[j]);
+ 
+          var randomLeft = Math.abs(Math.pow( Math.sin(offset/100), 2 )) * 200;
+          var randomRight = Math.abs(Math.pow( Math.sin((offset/100) + 10), 2 )) * 200;
+          var randomLeftConstraint = Math.abs(Math.pow( Math.sin((offset/90)+2), 2 )) * 300;
+          var randomRightConstraint = Math.abs(Math.pow( Math.sin((offset/90)+1), 2)) * 300;
+ 
+          ctx.beginPath();
+          ctx.moveTo(0, randomLeft + 10);
+ 
+          // ctx.lineTo(canvas.width, randomRight + 10);
+          ctx.bezierCurveTo(canvas.width / 3, randomLeftConstraint, canvas.width / 3 * 2, randomRightConstraint, canvas.width, randomRight + 10);
+          ctx.lineTo(canvas.width , canvas.height);
+          ctx.lineTo(0, canvas.height);
+          ctx.lineTo(0, randomLeft + 10);
+ 
+          ctx.closePath();
+          ctx.fill();
+        }
+ 
+        i++;
+      }
+      setInterval("draw()", 20);
+
+</script>
