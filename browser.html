@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Author" content="">
+<meta name="Keywords" content="">
+<meta name="Description" content="">
+<title></title>
+<style>
+	#move, .move{
+		width:100px;
+		height:100px;
+		position:absolute; 
+		background-color:red;
+		color:#000;
+	}
+</style>
+</head>
+
+<body>
+
+<div id="div" style="width:500px;height:600px;border:1px solid green;position:relative;">
+	<div id="move" style="display:none;"></div>
+	<div class="move"></div>
+	<div class="move"></div>
+</div>
+</body>
+</html>
+<script type="text/javascript" src="jquery-1.6.1.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		if($.browser.msie){//若是ie浏览器
+			if(eval(parseInt($.browser.version))<9){
+			//alert("IE版本小于9");
+		}
+		}else if($.browser.mozilla){//若是firefox浏览器
+			//alert("用的是Firefox，版本："+$.browser.version);
+		}else if($.browser.safari){//若是chrome浏览器
+			//alert("用的是Chrome，版本："+$.browser.version);
+		}else if($.browser.opera){//若是opera浏览器
+			//alert("用的是Opera，版本："+$.browser.version);
+		}
+	})
+
+	$(document).ready(function(){
+		//alert($(document).width());
+		var width = $('#div').width();
+		var height = $('#div').height();
+
+
+		var timer;
+		var w = width - $('.move').width();
+		var h = height - $('.move').height();
+		var left = false;
+		var top = false;
+		//alert(h);
+//		var ww = 110;
+//		var hh = 110;
+		//move();
+		//timer = setInterval(move,20);
+/*
+		function move(){
+			$('#move').animate({
+				left:ww,
+				top:hh
+			},10,function(){
+				if(left){
+					ww--;
+					if(ww <= 0)
+						left = false;
+				}else{
+					ww++;
+					if( ww >= w ){
+						left = true;
+					}
+				}
+
+				if(top){
+					hh--;
+					if(hh <= 0)
+						top = false;
+				}else{
+					hh++;
+					if( hh >= h ){
+						top = true;
+					}
+				}
+			});
+
+			//setTimeout(move,20);
+		}
+*/
+
+
+		$('.move').each(function(){
+			var ww = Math.round(Math.random() * w);
+			var hh = Math.round(Math.random() * h);
+			$(this).data('box',{left: false,top: false, w: ww, h:hh}).stop().animate({
+				top: ww,
+				left: hh
+			},10,function(){
+				moving(this);
+				//alert($(this).data('box').w)
+			});
+		});
+		
+		function  moving(obj){
+
+			var $this = $(obj);
+			$this.animate({
+				left: $this.data('box').w,
+				top: $this.data('box').h
+			},10,function(){
+				//alert($this.data('box').w);
+
+				if($this.data('box').left){
+					$this.data('box').w--;
+					if( $this.data('box').w <= 0)
+						//left = false;
+						$this.data('box').left = false;
+				}else{
+					$this.data('box').w++;
+					if( $this.data('box').w >= w ){
+						//left = true;
+						$this.data('box').left = true;
+					}
+				}
+
+				if($this.data('box').top){
+					$this.data('box').h--;
+					if( $this.data('box').h <= 0)
+						//left = false;
+						$this.data('box').top = false;
+				}else{
+					$this.data('box').h++;
+					if( $this.data('box').h >= h ){
+						//left = true;
+						//alert($this.data('box').h);
+						$this.data('box').top = true;
+					}
+				}
+
+				setTimeout(function(){
+					moving(obj)
+				},20);
+			});
+		}
+
+
+		function rand(mi,ma){   
+			var range = ma - mi;
+			var out = mi + Math.round( Math.random() * range) ;	
+			return parseInt(out);
+		};	
+		
+	})
+</script>
