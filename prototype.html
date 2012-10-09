@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Author" content="">
+<meta name="Keywords" content="">
+<meta name="Description" content="">
+<title></title>
+<style>
+	#move, .move{
+		width:100px;
+		height:100px;
+		position:absolute; 
+		background-color:red;
+		color:#000;
+	}
+</style>
+</head>
+
+<body>
+<!---
+<div id="div" style="width:500px;height:600px;border:1px solid green;position:relative;">
+	<div id="move" style="display:none;"></div>
+	<div class="move"></div>
+	<div class="move"></div>
+</div>
+-->
+</body>
+</html>
+<script type="text/javascript" src="jquery-1.6.1.min.js"></script>
+<script type="text/javascript">
+
+var Rectangle = function(cfg){
+	this.width = 50;
+	this.height = 50;
+	this.x = 50;
+	this.y = 50;
+	this.backColor = "red";
+	this.edgeColor = "black";
+	this.setArguments(cfg);
+}; 
+
+Rectangle.prototype.setArguments = function(cfg){
+	for(var x in cfg ){
+		this[x] = cfg[x];
+	}
+}
+
+Rectangle.prototype.draw = function(){
+	crx.fillStyle = this.backColor;
+	ctx.fillRect(this.x, this.y, this.width, this.height);
+	ctx.strokeStyle = this.edgeColor;
+	ctx.strokeRect(this.x, this.y, this.width, this.height);
+}
+
+var oo = new Rectangle( { height:100, x:100, y:100} )
+//alert(oo.width);
+//console.log('this is console log!');
+//alert(oo.name);
+var Debugger = function(){};
+Debugger.log = function(message){
+	try{
+		console.log(message);
+	}catch(exception){
+		return;
+	}
+}
+
+</script>
