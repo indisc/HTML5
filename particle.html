@@ -43,35 +43,80 @@
 	}
 
 	function canvasSupport(){
-		return Modernizr.canvas;
+		//return Modernizr.canvas;
 	}
 
 	function canvasApp(){
-			if( !canvasSupport()){
-				return;
-			}
+			//if( !canvasSupport()){
+				//return;
+			//}
 
 			var theCanvas = document.getElementById('canvas');
 			var context = theCanvas.getContext('2d');
-	
+			//var angle = 295;			
+			//var gravity = .1;
+			//var radians = angle * Math.PI / 180;			
+			//var vx = Math.cos(radians) * speed;
+			//var vy = Math.sin(radians) * speed;
+			var particles = [];
+			var QUANITY = 50;
 			var speed = 5;
-			var angle = 295;
-			var gravity = .1;
-			var radians = angle * Math.PI / 180;
-			var radius = 15;
-			var vx = Math.cos(radians) * speed;
-			var vy = Math.sin(radians) * speed;
+			
+			var startx = 50;
+			var starty = 50;
 
-			var p1 = {x:20, y:theCanvas.width - radius};
-			var ball = {x:p1.x, y:p1.y, velocityx:vx, velocityy:vy,radius:radius};
+			var radius = 30;
 
-			var pointImg = new Image();
-			pointImg.src = 'point.png';
-			var points = new Array();
+			for( var i = 0; i < QUANITY; i++ ){
+					var posx = startx*Math.random();
+					var posy = starty*Math.random();
+					var particle = {
+										posx: posx,
+										posy: posy,
+										x: posx,
+										y: posy,
+										vx: Math.random()*speed,
+										vy: Math.random()*speed,
+										radius: Math.floor(Math.random()*radius) + 5,
+										color: '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6)
+					};
+					particles.push(particle);
+			}
+
+
+
+
 			setInterval(drawScreen,33);
-
+			//drawScreen();
 
 		function drawScreen(){
+		//alert(particles.length);
+			context.fillStyle = '#000';
+			context.fillRect(0,0, theCanvas.width, theCanvas.height );
+			//context.strokeStyle = '#000000';
+			//context.strokeRect(1,1, theCanvas.width -2, theCanvas.height -2 );
+			for(var i = 0; i < particles.length; i++ ){
+				var particle = particles[i];
+				//alert(particle.x);
+				if( particle.x + particle.radius >= theCanvas.height || particle.y + particle.radius >=theCanvas.width ){
+					particle.x = particle.posx;
+					particle.y = particle.posy;
+					particle.color = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
+
+				}
+				particle.x += particle.vx;
+				particle.y += particle.vy;
+				context.beginPath();
+				context.fillStyle = particle.color;
+				context.shadowBlur    = 50;
+				context.shadowColor   = particle.color;
+				context.arc(particle.x, particle.y,particle.radius, 0, Math.PI*2, true);
+				context.closePath();
+				context.fill();
+
+
+			}
+/*
 			context.fillStyle = '#eeeeee';
 			context.fillRect(0,0, theCanvas.width, theCanvas.height );
 			context.strokeStyle = '#000000';
@@ -91,13 +136,17 @@
 				context.drawImage(pointImg, points[i].x, points[i].y,3,3);
 			}
 
-			context.fillStyle = '#000000';
+			context.fillStyle = 'red';
 			context.beginPath();
+			//context.shadowOffsetX = 5;
+			//context.shadowOffsetY = 5;
+			context.shadowBlur    = 5;
+			context.shadowColor   = 'red';
 			
 			context.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2, true);
 			context.closePath();
 			context.fill();
-
+*/
 
 
 		}
