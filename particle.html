@@ -65,7 +65,7 @@
 			var startx = 50;
 			var starty = 50;
 
-			var radius = 30;
+			var radius = 40;
 
 			for( var i = 0; i < QUANITY; i++ ){
 					var posx = startx*Math.random();
@@ -73,12 +73,12 @@
 					var particle = {
 										posx: posx,
 										posy: posy,
-										x: posx,
-										y: posy,
+										x: Math.random()*theCanvas.width,
+										y: Math.random()*theCanvas.height,
 										vx: Math.random()*speed,
 										vy: Math.random()*speed,
 										radius: Math.floor(Math.random()*radius) + 5,
-										color: '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6)
+										color:  '#000'
 					};
 					particles.push(particle);
 			}
@@ -91,24 +91,31 @@
 
 		function drawScreen(){
 		//alert(particles.length);
+			context.globalCompositeOperation = "source-over";
 			context.fillStyle = '#000';
 			context.fillRect(0,0, theCanvas.width, theCanvas.height );
 			//context.strokeStyle = '#000000';
 			//context.strokeRect(1,1, theCanvas.width -2, theCanvas.height -2 );
+			context.globalCompositeOperation = "lighter";
 			for(var i = 0; i < particles.length; i++ ){
 				var particle = particles[i];
 				//alert(particle.x);
 				if( particle.x + particle.radius >= theCanvas.height || particle.y + particle.radius >=theCanvas.width ){
 					particle.x = particle.posx;
 					particle.y = particle.posy;
-					particle.color = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
+				    particle.color = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
 
 				}
 				particle.x += particle.vx;
 				particle.y += particle.vy;
 				context.beginPath();
-				context.fillStyle = particle.color;
-				context.shadowBlur    = 50;
+				var gradient = context.createRadialGradient(particle.x, particle.y, 0, particle.x, particle.y, particle.radius );
+				//.addColorStop(0, "white");
+				gradient.addColorStop(0,  particle.color);
+				gradient.addColorStop(0.4, particle.color);
+				gradient.addColorStop(1, "black");
+				context.fillStyle = gradient;
+				//context.shadowBlur    = 50;
 				context.shadowColor   = particle.color;
 				context.arc(particle.x, particle.y,particle.radius, 0, Math.PI*2, true);
 				context.closePath();
