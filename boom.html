@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Author" content="">
+<meta name="Keywords" content="">
+<meta name="Description" content="">
+<title></title>
+<style>
+	#move, .move{
+		width:100px;
+		height:100px;
+		position:absolute; 
+		background-color:red;
+		color:#000;
+	}
+</style>
+</head>
+
+<body>
+
+<canvas id="canvas" style="border:1px solid green;" width="500" height="500">
+</canvas>
+</body>
+</html>
+<script type="text/javascript" src="jquery-1.6.1.min.js"></script>
+<script type="text/javascript" src="modernizr.custom.52013.js"></script>
+
+<script type="text/javascript">
+
+	window.addEventListener("load",eventWindowLoaded,false);
+
+	var Debugger = function(){};
+	Debugger.log = function(message){
+		try{
+			console.log(message);
+		}catch(exception){}
+		return;
+	}
+
+	function eventWindowLoaded () {
+		canvasApp();
+	}
+
+	function canvasSupport(){
+		//return Modernizr.canvas;
+	}
+
+	function canvasApp(){
+			//if( !canvasSupport()){
+				//return;
+			//}
+
+			var theCanvas = document.getElementById('canvas');
+			var context = theCanvas.getContext('2d');
+			//var angle = 295;			
+			//var gravity = .1;
+			//var radians = angle * Math.PI / 180;			
+			//var vx = Math.cos(radians) * speed;
+			//var vy = Math.sin(radians) * speed;
+			var particles = [];
+			var QUANITY = 50;
+			var speed = 5;
+			
+			var startx = theCanvas.width;
+			var starty = theCanvas.height;
+
+			var radius = 40;
+			var angle = 360 / QUANITY;
+			var radians = angle * Math.PI / 180;
+			var particle_radians = 0;
+			var vx = Math.cos(radians) * speed;
+			var vy = Math.sin(radians) * speed;
+			for( var i = 0; i < QUANITY; i++ ){
+					//var posx = start*.5;
+					//var posy = starty*.5;
+					var particle = {
+										posx: startx*.5,
+										posy: starty*.5,
+										x: startx*.5,
+										y: starty*.5,
+										vx: Math.cos(particle_radians) * speed,
+										vy:  Math.sin(particle_radians) * speed,
+										radius: 3,
+										//radians: particle_radians,
+										color:  '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6)
+					};
+					particle_radians += radians;
+					particles.push(particle);
+			}
+		var tmer;
+		$(document).ready(function(){
+				$('#canvas').click(function(){
+					setTimer();
+			});
+		})
+
+		function setTimer(){
+			timer = setInterval(function(){
+				drawScreen();
+			},33);		
+		}
+
+		function cleanTimer(){
+			clearInterval(timer)
+		}
+
+
+
+			//drawScreen();
+
+		function drawScreen(){
+		//alert(particles.length);
+			context.globalCompositeOperation = "source-over";
+			context.fillStyle = 'rgba(0,0,0,.2)';
+			context.fillRect(0,0, theCanvas.width, theCanvas.height );
+			//context.strokeStyle = '#000000';
+			//context.strokeRect(1,1, theCanvas.width -2, theCanvas.height -2 );
+			context.globalCompositeOperation = "lighter";
+			for(var i = 0; i < particles.length; i++ ){
+				var particle = particles[i];
+				
+
+				
+				particle.x += particle.vx;
+				particle.y += particle.vy;
+				context.beginPath();
+				context.fillStyle = particle.color;
+				//context.shadowColor   = particle.color;
+				//alert(particle.vy);
+				context.arc(particle.x, particle.y,particle.radius, 0, Math.PI*2, true);
+				context.closePath();
+				context.fill();
+
+				if( particle.x >= theCanvas.height +300  || particle.y  >=theCanvas.width + 300 || particle.x <= -300 || particle.y <= -300 ){
+					
+					particle.x = particle.posx;
+					particle.y = particle.posy;
+					//cleanTimer();
+				    //particle.color = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
+				}
+			}
+/*
+			context.fillStyle = '#eeeeee';
+			context.fillRect(0,0, theCanvas.width, theCanvas.height );
+			context.strokeStyle = '#000000';
+			context.strokeRect(1,1, theCanvas.width -2, theCanvas.height -2 );
+			 
+			 ball.velocityy += gravity;
+
+			if( (ball.y + ball.radius) > theCanvas.height ){
+				ball.velocityy = -(ball.velocityy);
+			}
+			//alert(ball.velocityy);
+			ball.y   += ball.velocityy;
+			ball.x   += ball.velocityx;
+			points.push({x:ball.x, y:ball.y});
+			
+			for( var i = 0; i < points.length; i++ ){
+				context.drawImage(pointImg, points[i].x, points[i].y,3,3);
+			}
+
+			context.fillStyle = 'red';
+			context.beginPath();
+			//context.shadowOffsetX = 5;
+			//context.shadowOffsetY = 5;
+			context.shadowBlur    = 5;
+			context.shadowColor   = 'red';
+			
+			context.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2, true);
+			context.closePath();
+			context.fill();
+*/
+
+
+		}
+
+		function updateBall(ball){
+			ball.radians = ball.angle * Math.PI / 180;
+			ball.xunits = Math.cos(ball.radians) * ball.speed;
+			ball.yunits = Math.sin(ball.radians) * ball.speed;
+		}
+
+	}
+
+</script>
