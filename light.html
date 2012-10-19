@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Author" content="">
+<meta name="Keywords" content="">
+<meta name="Description" content="">
+<title></title>
+<style>
+	#move, .move{
+		width:100px;
+		height:100px;
+		position:absolute; 
+		background-color:red;
+		color:#000;
+	}
+</style>
+</head>
+
+<body>
+
+<canvas id="canvas" style="border:1px solid green;" width="500" height="500">
+</canvas>
+</body>
+</html>
+<script type="text/javascript" src="jquery-1.6.1.min.js"></script>
+<script type="text/javascript" src="modernizr.custom.52013.js"></script>
+
+<script type="text/javascript">
+
+	window.addEventListener("load",eventWindowLoaded,false);
+
+	var Debugger = function(){};
+	Debugger.log = function(message){
+		try{
+			console.log(message);
+		}catch(exception){}
+		return;
+	}
+
+	function eventWindowLoaded () {
+		canvasApp();
+	}
+
+	function canvasSupport(){
+		return Modernizr.canvas;
+	}
+
+	function canvasApp(){
+			if( !canvasSupport()){
+				return;
+			}
+
+			var theCanvas = document.getElementById('canvas');
+			var context = theCanvas.getContext('2d');
+			var conllection = [];
+
+			mouseX = theCanvas.width*.5;
+			mouseY = theCanvas.height*.5;
+			
+			var particles = function( x, y, max_life ){
+					this.life = 0;
+					this.max_life = max_life;
+					this.age = 0;
+					this.speed = Math.random() + 1;
+					this.x = x;
+					this.y = y;
+					this.rw = Math.random() * 360;
+			}
+
+		theCanvas.addEventListener('mousedown', posChanged, false);
+		setInterval(drawScreen,33);
+		//drawScreen();
+		 function posChanged(event) {
+			context.fillStyle = 'rgba(0,0,0,1)';
+			context.fillRect(0,0, theCanvas.width, theCanvas.height );
+			mouseX = event.clientX;
+			mouseY = event.clientY;
+			conllection.push( new particles( mouseX, mouseY, 100 ) );
+			//alert(mouseX);
+			//drawScreen();
+		 }
+		function drawScreen(){
+			//alert(conllection.length);
+			context.beginPath();
+			context.strokeStyle = '#fff';
+			for( var i = 0; i < conllection.length; i++ ){
+					var particle = conllection[i];
+					particle.age++;
+
+					context.moveTo( particle.x, particle.y );
+					particle.rw = (30 + 210*Math.random()) * Math.PI / 180;
+					particle.x += 15*Math.cos(particle.rw);
+					particle.y += 15*Math.sin(particle.rw);
+					context.lineWidth = 1;
+					context.lineTo( particle.x, particle.y );
+
+					if( particle.age > particle.max_life || particle.x < 0 || particle.y < 0 || particle.x > theCanvas.width || particle.y > theCanvas.height ){
+						conllection.splice(i, 1);
+						//alert(particle.max_life);
+					}
+
+					if( Math.random() > 0.95 && conllection.length < 1000 ){
+						conllection.push( new particles( particle.x, particle.y, particle.max_life / 10 ) );
+						//alert('add');
+					}
+
+				
+			}			
+			context.stroke();
+			context.closePath();
+
+		}
+	}
+
+
+
+
+
+
+</script>

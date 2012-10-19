@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Author" content="">
+<meta name="Keywords" content="">
+<meta name="Description" content="">
+<title></title>
+<style>
+	#move, .move{
+		width:100px;
+		height:100px;
+		position:absolute; 
+		background-color:red;
+		color:#000;
+	}
+</style>
+</head>
+
+<body>
+
+<canvas id="canvas" style="border:1px solid green;" width="500" height="500">
+</canvas>
+</body>
+</html>
+<script type="text/javascript" src="jquery-1.6.1.min.js"></script>
+<script type="text/javascript" src="modernizr.custom.52013.js"></script>
+
+<script type="text/javascript">
+
+	window.addEventListener("load",eventWindowLoaded,false);
+
+	var Debugger = function(){};
+	Debugger.log = function(message){
+		try{
+			console.log(message);
+		}catch(exception){}
+		return;
+	}
+
+	function eventWindowLoaded () {
+		canvasApp();
+	}
+
+	function canvasSupport(){
+		return Modernizr.canvas;
+	}
+
+	function canvasApp(){
+			if( !canvasSupport()){
+				return;
+			}
+
+			var theCanvas = document.getElementById('canvas');
+			var context = theCanvas.getContext('2d');
+			var particles = [];
+			var speed = 5;
+			var width = theCanvas.width;
+			var height = theCanvas.height;
+			var mouseX = width*.5;
+			var mouseY = height*.5;	
+			var QUANITY = 15;
+			var r = 20;
+			var num = 10;
+			
+			
+			var startx = 50;
+			var starty = 50;
+
+			var radius = 20;
+
+			for( var i = 0; i < QUANITY; i++ ){
+					var posx = startx*Math.random();
+					var posy = starty*Math.random();
+					r += 5;
+					num += 10;
+					var particle = {
+										posx: mouseX,
+										posy: mouseY,
+										x: mouseX,
+										y: mouseY,
+										radians: 360 / num * Math.PI / 180,
+										cur_radians: 0,
+										vx: Math.random()*speed,
+										vy: Math.random()*speed,
+										r: r,
+										num:num,
+										radius: 2,
+										color:  '#fff'
+					};
+					
+					particles.push(particle);
+			}	
+		theCanvas.addEventListener('mousemove', posChanged, false);
+		setInterval(drawScreen,33);
+		//drawScreen();
+		 function posChanged(event) {
+			mouseX = event.clientX;
+			mouseY = event.clientY;
+			//alert(mouseX);
+			//drawScreen();
+		 }
+		function drawScreen(){
+			context.fillStyle = '#eeeeee';
+			context.fillRect(0,0, theCanvas.width, theCanvas.height );
+			//alert(particles.length);
+			for( var i = 0; i < particles.length; i++ ){
+				var particle = particles[i];
+				for(var j = 0; j< particle.num; j++ ){
+					var x = mouseX;
+					particle.posx += ( mouseX - particle.posx ) * 0.003;
+					particle.posy += ( mouseY - particle.posy ) * 0.003;
+					particle.x = particle.posx +  Math.cos( particle.cur_radians) * particle.r;
+					particle.y = particle.posy + Math.sin( particle.cur_radians) * particle.r;
+					var y = mouseY;
+					particle.cur_radians += particle.radians;
+					//alert(particle.r);
+
+					context.fillStyle= '#000000';
+					context.beginPath();
+					context.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2, true);
+					context.closePath();
+					context.fill();
+				}
+			}
+		}
+	}
+
+
+
+
+
+
+</script>
