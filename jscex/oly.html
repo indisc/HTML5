@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Author" content="">
+<meta name="Keywords" content="">
+<meta name="Description" content="">
+<title></title>
+<style>
+	#move, .move{
+		width:100px;
+		height:100px;
+		position:absolute; 
+		background-color:red;
+		color:#000;
+	}
+</style>
+</head>
+
+<body>
+
+<canvas id="canvas" style="border:1px solid green;" width="500" height="500">
+</canvas>
+</body>
+</html>
+<script language="javascript" type="text/javascript" src="src/jscex.js"></script>
+<script language="javascript" type="text/javascript" src="src/uglifyjs-parser.js"></script>
+<script language="javascript" type="text/javascript" src="src/jscex.builderBase.js"></script>
+<script language="javascript" type="text/javascript" src="src/jscex.async.js"></script>
+<script language="javascript" type="text/javascript" src="src/json2.js"></script> 
+
+
+<script type="text/javascript" src="src/jquery-1.6.1.min.js"></script>
+
+<script type="text/javascript">  
+    var c = document.getElementById("canvas");  
+        var ctx = c.getContext("2d");  
+        var x = 150;  
+        var y = 150;  
+        var r = 100;  
+		/*
+        var drawAsync = eval(Jscex.compile("async", function () {  
+            cxt.moveTo(x - r, y);  
+            for (var i = x - r; i < x + r + 1; i++) {  
+             
+                $await(Jscex.Async.sleep(100));  
+                var tempY = Math.pow(r * r - (x - i) * (x - i), 1 / 2);  
+                cxt.lineTo(i, y + tempY);  
+                cxt.stroke();  
+            }  
+            cxt.moveTo(x - r, y);  
+            for (var i = x - r; i < x + r + 1; i++) {  
+                $await(Jscex.Async.sleep(100));  
+                var tempY = Math.pow(r * r - (x - i) * (x - i), 1 / 2);  
+                cxt.lineTo(i, y - tempY);  
+                cxt.stroke();  
+            }  
+        }));  
+        drawAsync().start();  */
+	   ctx.lineWidth = 5;  
+       ctx.strokeStyle = "red";  
+       ctx.beginPath();  
+       ctx.arc(c.width*.5, c.height*.5, 40, 0, Math.PI * 2, false);  
+       ctx.stroke();
+
+	   
+	   ctx.lineWidth = 1;
+	   
+	   var lights = [];
+	   var light = function(angle){
+						this.startx = c.width*.5 + Math.cos(angle)*40; 
+						this.starty = c.height*.5 + Math.sin(angle)*40;
+						this.rand = Math.random()*20;						
+						this.tox = this.startx; 
+						this.toy = this.starty;
+						this.flag = false;
+						this.angle = angle;
+						this.setxy = function(){
+							this.tox = c.width*.5 + Math.cos(this.angle)*(70 + this.rand);
+							this.toy = c.height*.5 + Math.sin(this.angle)*( 70 + this.rand);
+							//return tox;
+						};
+						//alert(this.tox);
+	   }
+	   for(var i = 0; i < 360; i+=12){
+			lights.push( new light(i) );
+	   }
+	   function draw(){
+		//cts.strokeStyle =
+			//alert(lights.length);
+		    ctx.fillStyle = '#000000';
+			ctx.fillRect(1,1, c.width, c.height);
+		   for(var i = 0; i < lights.length; i++){
+				var line = lights[i];
+				
+				//alert(line.tox);
+				ctx.moveTo(line.startx, line.starty);
+				ctx.lineTo(line.tox, line.toy);
+				//line.rand --;
+				//if(line.rand > 50){
+				//	line.rand = Math.random()*20;
+			//	}
+			line.setxy();
+			//alert(line.rand);
+				if(line.flag){
+					line.rand++;
+					if(line.rand > 50){
+						line.flag = false;
+						line.setxy();
+						
+					}
+				}else{
+					line.rand--;
+					if(line.rand < 0 ){
+						line.flag = true;
+						//alert('50');
+					}
+				}
+		   }
+		   ctx.stroke();
+		   //alert('ooo');
+	   }
+
+	   //draw();
+	   setInterval(draw,33);
+
+</script>
